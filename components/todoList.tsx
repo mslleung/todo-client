@@ -44,7 +44,7 @@ function TodoListRow({
             }}
           >
             <Typography variant="body1">
-              Due: {todoTask.dueDate.toLocaleString()}
+              Due: {todoTask.dueDate.toLocaleString('en')}
             </Typography>
             <Chip variant="outlined" label={toDisplayString(todoTask.status)} />
           </Box>
