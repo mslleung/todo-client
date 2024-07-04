@@ -1,0 +1,159 @@
+
+syntax = "proto2";
+
+
+// serial name 'io.sleekflow.infrastructure.network.proto.NetMessage'
+message NetMessage {
+  optional Header header = 1;
+  optional Payload payload = 2;
+}
+
+// serial name 'io.sleekflow.infrastructure.network.proto.Header?'
+message Header {
+  optional MessageType messageType = 1;
+  optional RequestType requestType = 2;
+  optional string requestUuid = 3;
+}
+
+// serial name 'io.sleekflow.infrastructure.network.proto.payload.Payload?'
+message Payload {
+  required string type = 1;
+  // decoded as message with one of these types:
+  //   message CreateAccountRequestPayload, serial name 'io.sleekflow.infrastructure.network.proto.payload.CreateAccountRequestPayload'
+  //   message CreateTodoTaskRequestPayload, serial name 'io.sleekflow.infrastructure.network.proto.payload.CreateTodoTaskRequestPayload'
+  //   message CreateTodoTaskResponsePayload, serial name 'io.sleekflow.infrastructure.network.proto.payload.CreateTodoTaskResponsePayload'
+  //   message DeleteTodoTaskRequestPayload, serial name 'io.sleekflow.infrastructure.network.proto.payload.DeleteTodoTaskRequestPayload'
+  //   message DeleteTodoTaskResponsePayload, serial name 'io.sleekflow.infrastructure.network.proto.payload.DeleteTodoTaskResponsePayload'
+  //   message GetTodoTaskRequestPayload, serial name 'io.sleekflow.infrastructure.network.proto.payload.GetTodoTaskRequestPayload'
+  //   message GetTodoTaskResponsePayload, serial name 'io.sleekflow.infrastructure.network.proto.payload.GetTodoTaskResponsePayload'
+  //   message UpdateTodoTaskRequestPayload, serial name 'io.sleekflow.infrastructure.network.proto.payload.UpdateTodoTaskRequestPayload'
+  //   message UpdateTodoTaskResponsePayload, serial name 'io.sleekflow.infrastructure.network.proto.payload.UpdateTodoTaskResponsePayload'
+  required bytes value = 2;
+}
+
+// serial name 'io.sleekflow.infrastructure.network.proto.MessageType?'
+enum MessageType {
+  Unspecified = 0;
+  UserInitiatedRequest = 1;
+  UserInitiatedRequestResponse = 2;
+  ForwardedRequestResponse = 3;
+}
+
+// serial name 'io.sleekflow.infrastructure.network.proto.RequestType?'
+enum RequestType {
+  CreateAccount = 0;
+  Login = 1;
+  CreateTodoTask = 2;
+  GetTodoTask = 3;
+  UpdateTodoTask = 4;
+  DeleteTodoTask = 5;
+}
+
+// serial name 'io.sleekflow.infrastructure.network.proto.payload.CreateAccountRequestPayload'
+message CreateAccountRequestPayload {
+  optional string username = 1;
+  optional string password = 2;
+}
+
+// serial name 'io.sleekflow.infrastructure.network.proto.payload.CreateTodoTaskRequestPayload'
+message CreateTodoTaskRequestPayload {
+  optional string name = 1;
+  optional string description = 2;
+  optional int64 dueDate = 3;
+  optional Status status = 4;
+}
+
+// serial name 'io.sleekflow.infrastructure.network.proto.payload.CreateTodoTaskResponsePayload'
+message CreateTodoTaskResponsePayload {
+  optional ErrorCode errorCode = 1;
+  optional int32 id = 2;
+}
+
+// serial name 'io.sleekflow.infrastructure.network.proto.payload.DeleteTodoTaskRequestPayload'
+message DeleteTodoTaskRequestPayload {
+  optional int32 id = 1;
+}
+
+// serial name 'io.sleekflow.infrastructure.network.proto.payload.DeleteTodoTaskResponsePayload'
+message DeleteTodoTaskResponsePayload {
+  optional ErrorCode errorCode = 1;
+}
+
+// serial name 'io.sleekflow.infrastructure.network.proto.payload.GetTodoTaskRequestPayload'
+message GetTodoTaskRequestPayload {
+  optional GetTodoTaskFilter filter = 1;
+  optional GetTodoTaskSort sort = 2;
+}
+
+// serial name 'io.sleekflow.infrastructure.network.proto.payload.GetTodoTaskResponsePayload'
+message GetTodoTaskResponsePayload {
+  repeated TodoProtoMessage todos = 1;
+}
+
+// serial name 'io.sleekflow.infrastructure.network.proto.payload.UpdateTodoTaskRequestPayload'
+message UpdateTodoTaskRequestPayload {
+  optional int32 id = 1;
+  optional string name = 2;
+  optional string description = 3;
+  optional int64 dueDate = 4;
+  optional Status status = 5;
+}
+
+// serial name 'io.sleekflow.infrastructure.network.proto.payload.UpdateTodoTaskResponsePayload'
+message UpdateTodoTaskResponsePayload {
+  optional ErrorCode errorCode = 1;
+}
+
+// serial name 'io.sleekflow.infrastructure.network.proto.payload.messages.Status?'
+enum Status {
+  Status_Unspecified = 0;
+  Status_NotStarted = 1;
+  Status_InProgress = 2;
+  Status_Completed = 3;
+}
+
+// serial name 'io.sleekflow.infrastructure.network.proto.payload.messages.ErrorCode?'
+enum ErrorCode {
+  ErrorCode_Unspecified = 0;
+  ErrorCode_Success = 1;
+  ErrorCode_ResourceDoesNotExist = 2;
+  ErrorCode_ResourceNotUpdated = 3;
+}
+
+// serial name 'io.sleekflow.infrastructure.network.proto.payload.GetTodoTaskFilter?'
+message GetTodoTaskFilter {
+  optional int64 dueDateRangeStart = 1;
+  optional int64 dueDateRangeEnd = 2;
+  // WARNING: an empty collection decoded when a value is missing
+  repeated Status statusList = 3;
+}
+
+// serial name 'io.sleekflow.infrastructure.network.proto.payload.GetTodoTaskSort?'
+message GetTodoTaskSort {
+  optional GetTodoTaskSortBy sortBy = 1;
+  optional GetTodoTaskSortOrder sortOrder = 2;
+}
+
+// serial name 'io.sleekflow.infrastructure.network.proto.payload.TodoProtoMessage'
+message TodoProtoMessage {
+  optional int32 id = 1;
+  optional string name = 2;
+  optional string description = 3;
+  optional int64 dueDate = 4;
+  optional Status status = 5;
+}
+
+// serial name 'io.sleekflow.infrastructure.network.proto.payload.GetTodoTaskSortBy?'
+enum GetTodoTaskSortBy {
+  GetTodoTaskSortBy_Unspecified = 0;
+  GetTodoTaskSortBy_ByName = 1;
+  GetTodoTaskSortBy_ByDueDate = 2;
+  GetTodoTaskSortBy_ByStatus = 3;
+}
+
+// serial name 'io.sleekflow.infrastructure.network.proto.payload.GetTodoTaskSortOrder?'
+enum GetTodoTaskSortOrder {
+  GetTodoTaskSortOrder_Unspecified = 0;
+  GetTodoTaskSortOrder_ASC = 1;
+  GetTodoTaskSortOrder_DESC = 2;
+}
